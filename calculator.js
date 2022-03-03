@@ -21,20 +21,39 @@ function getCurrentUIValues() {
 // Put some default values in the inputs
 // Call a function to calculate the current monthly payment
 function setupIntialValues() {
+
 }
 
 // Get the current values from the UI
 // Update the monthly payment
 function update() {
+
 }
 
+const exampleLoan = {
+  amount: 200000,
+  years: 15,
+  rate: 0.6
+}
 // Given an object of values (a value has amount, years and rate ),
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
 function calculateMonthlyPayment(values) {
+  let amo = values['amount'];
+  let n = 12 * values['years'];
+  let r = values['rate'];
+  const monthRate = r / 12;
+
+  const beforeInt = amo * monthRate;
+  const monthInt = 1 - ((1+monthRate)**-n);
+
+  const finMonPay = beforeInt / monthInt;
+
+  return finMonPay;
 }
 
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
 function updateMonthly(monthly) {
+
 }
