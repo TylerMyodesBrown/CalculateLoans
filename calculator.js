@@ -21,39 +21,52 @@ function getCurrentUIValues() {
 // Put some default values in the inputs
 // Call a function to calculate the current monthly payment
 function setupIntialValues() {
-
+  document.getElementById("loan-amount").placeholder = 'Amount for loan: 200000'
+  document.getElementById("loan-years").placeholder = 'Years of loan: 12'
+  document.getElementById("loan-rate").placeholder = 'Yearly loan rate: 6'
 }
 
 // Get the current values from the UI
 // Update the monthly payment
 function update() {
-
+  let v = getCurrentUIValues();
+  updateMonthly(calculateMonthlyPayment(v));
 }
 
-const exampleLoan = {
-  amount: 200000,
-  years: 15,
-  rate: 0.6
-}
 // Given an object of values (a value has amount, years and rate ),
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
 function calculateMonthlyPayment(values) {
   let amo = values['amount'];
   let n = 12 * values['years'];
-  let r = values['rate'];
-  const monthRate = r / 12;
 
-  const beforeInt = amo * monthRate;
-  const monthInt = 1 - ((1+monthRate)**-n);
+  try{
+    errAttempt(values['rate'])
+  } catch(e){
+    console.error(e)
+  }
+
+  let r = (values['rate']/100) / 12;
+
+  const beforeInt = amo * r;
+  const monthInt = 1 - ((1+r)**-n);
 
   const finMonPay = beforeInt / monthInt;
 
-  return finMonPay;
+  let expandPau = finMonPay.toFixed(2);
+
+  return expandPau;
 }
 
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
 function updateMonthly(monthly) {
+  document.getElementById("monthly-payment").innerHTML = `$${monthly}`
+  return monthly
+}
 
+
+function errAttempt(rate){
+  if(rate === NaN) throw 'Remove percent sign please'
+  if(rate <= 0.5) throw 'Number as a percentage without percent sign please'
 }
